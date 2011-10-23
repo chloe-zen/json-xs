@@ -3,8 +3,8 @@
    "author" : [
       "unknown"
    ],
-   "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.58, CPAN::Meta::Converter version 2.110930001",
+   "dynamic_config" : 0,
+   "generated_by" : "ExtUtils::MakeMaker version 6.58, CPAN::Meta::Converter version 2.110930001, CPAN::Meta::Converter version 2.112621",
    "license" : [
       "unknown"
    ],
@@ -37,5 +37,5 @@
       }
    },
    "release_status" : "stable",
-   "version" : "2.32"
+   "version" : "2.3201"
 }
