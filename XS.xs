@@ -704,15 +704,25 @@ encode_rv (enc_t *enc, SV *sv)
 #endif
           if (enc->json.flags & F_CONV_BLESSED)
             {
-              // we re-bless the reference to get overload and other niceties right
               GV *to_json = gv_fetchmethod_autoload (SvSTASH (sv), "TO_JSON", 0);
 
               if (to_json)
                 {
                   dSP;
+                  SV *rv;
 
                   ENTER; SAVETMPS; PUSHMARK (SP);
-                  XPUSHs (sv_bless (sv_2mortal (newRV_inc (sv)), SvSTASH (sv)));
+
+                  rv = sv_2mortal (newRV_inc (sv));
+#if PERL_VERSION < 10
+                  // overloading flags used to be carried in the RV.
+                  // fortunately that's in the past, but we still support it.
+                  // re-blessing would break when SvREADONLY (sv),
+                  //   e.g. with restricted hashes.
+                  if (Gv_AMG (SvSTASH (sv))
+                      SvAMAGIC_on (rv);
+#endif
+                  XPUSHs (rv);
 
                   // calling with G_SCALAR ensures that we always get a 1 return value
                   PUTBACK;
@@ -839,7 +849,7 @@ encode_sv (enc_t *enc, SV *sv)
     encode_str (enc, "null", 4, 0);
   else
     croak ("encountered perl type (%s,0x%x) that JSON cannot handle, you might want to report this",
-           SvPV_nolen (sv), SvFLAGS (sv));
+           SvPV_nolen (sv), (unsigned int)SvFLAGS (sv));
 }
 
 static SV *
@@ -1607,7 +1617,7 @@ decode_json (SV *string, JSON *json, char **offset_return)
 
       croak ("%s, at character offset %d (before \"%s\")",
              dec.err,
-             ptr_to_index (string, dec.cur),
+             (int)ptr_to_index (string, dec.cur),
              dec.cur != dec.end ? SvPV_nolen (uni) : "(end of string)");
     }
 
