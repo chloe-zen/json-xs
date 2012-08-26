@@ -3,6 +3,8 @@ Changes
 MANIFEST
 COPYING
 Makefile.PL
+META.yml
+META.json
 XS.pm
 XS.xs
 XS/Boolean.pm
@@ -33,5 +35,3 @@ t/21_evans.t
 t/22_comment_at_eof.t
 t/99_binary.t
 typemap
-META.yml                                 Module YAML meta-data (added by MakeMaker)
-META.json                                Module JSON meta-data (added by MakeMaker)
