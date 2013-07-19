@@ -4,9 +4,18 @@ TODO: maybe detetc and croak on more invalid inputs (e.g. +-inf/nan)
 TODO: maybe avoid the reblessing and better support readonly objects.
 TODO: http://stevehanov.ca/blog/index.php?id=104 compression
 
-2.3301 Sat Oct 22 22:49:52 PDT 2011
+2.3401 Fri Jul 19 00:29:08 PDT 2013
 	- avoid redundant sv_bless, which caused exceptions with restricted
 	  hashes and other readonly values
+
+2.34 Thu May 23 11:30:34 CEST 2013
+	- work around bugs in perl 5.18 breaking more than 100
+          widely used modules, without a fix in sight because
+          p5pers don't care about CPAN anymore.
+	- when canonicalising, only allocate up to 64 hash key
+          pointers on the stack. for larger hashes, use the heap,
+          to avoid using too much stackspace.
+        - discuss the problem with setlocale (reported by a few victims).
 
 2.33 Wed Aug  1 21:03:52 CEST 2012
 	- internal encode/decode XS wrappers did not expect stack
